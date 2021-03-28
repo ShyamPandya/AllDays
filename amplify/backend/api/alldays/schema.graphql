@@ -1,0 +1,16 @@
+type User @model {
+  id: ID!
+  username: String!
+  email: String!
+  imageUri: String
+  posts: [Post] @connection(keyName: "byUser", fields: ["id"])
+}
+
+type Post @model @key(name: "byUser", fields: ["userID"]) {
+  id: ID!
+  videoUri: String!
+  description: String!
+
+  userID: ID!
+  user: User @connection(fields: ["userID"])
+}

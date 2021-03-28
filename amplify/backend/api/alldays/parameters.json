@@ -1,0 +1,5 @@
+{
+  "AppSyncApiName": "alldays",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false
+}
