@@ -19,6 +19,8 @@ export const getUser = /* GraphQL */ `
         }
         nextToken
       }
+      brandInterest
+      categoryInterest
       createdAt
       updatedAt
     }
@@ -39,6 +41,8 @@ export const listUsers = /* GraphQL */ `
         posts {
           nextToken
         }
+        brandInterest
+        categoryInterest
         createdAt
         updatedAt
       }
@@ -61,6 +65,8 @@ export const getPost = /* GraphQL */ `
         posts {
           nextToken
         }
+        brandInterest
+        categoryInterest
         createdAt
         updatedAt
       }
@@ -86,6 +92,8 @@ export const listPosts = /* GraphQL */ `
           username
           email
           imageUri
+          brandInterest
+          categoryInterest
           createdAt
           updatedAt
         }

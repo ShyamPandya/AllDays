@@ -19,6 +19,8 @@ export const onCreateUser = /* GraphQL */ `
         }
         nextToken
       }
+      brandInterest
+      categoryInterest
       createdAt
       updatedAt
     }
@@ -42,6 +44,8 @@ export const onUpdateUser = /* GraphQL */ `
         }
         nextToken
       }
+      brandInterest
+      categoryInterest
       createdAt
       updatedAt
     }
@@ -65,6 +69,8 @@ export const onDeleteUser = /* GraphQL */ `
         }
         nextToken
       }
+      brandInterest
+      categoryInterest
       createdAt
       updatedAt
     }
@@ -85,6 +91,8 @@ export const onCreatePost = /* GraphQL */ `
         posts {
           nextToken
         }
+        brandInterest
+        categoryInterest
         createdAt
         updatedAt
       }
@@ -108,6 +116,8 @@ export const onUpdatePost = /* GraphQL */ `
         posts {
           nextToken
         }
+        brandInterest
+        categoryInterest
         createdAt
         updatedAt
       }
@@ -131,6 +141,8 @@ export const onDeletePost = /* GraphQL */ `
         posts {
           nextToken
         }
+        brandInterest
+        categoryInterest
         createdAt
         updatedAt
       }
