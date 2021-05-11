@@ -1,10 +1,15 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {createDrawerNavigator} from '@react-navigation/drawer';
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem} from '@react-navigation/drawer';
 import {View, TouchableOpacity, Image} from 'react-native';
-import Home from '../screens/home';
+import Video from '../screens/videos';
 import ProfilePage from '../components/Profile';
+import HomePage from '../screens/home';
 import Camera from '../screens/camera';
 import CreatePost from '../screens/createPost';
 import SignOut from '../screens/signout';
@@ -39,6 +44,30 @@ const NavigationDrawerStructure = props => {
   );
 };
 
+const HomePageStack = rootProps => {
+  return (
+    <Stack.Navigator initialRouteName="HomePage">
+      <Stack.Screen
+        name="HomePage"
+        options={{
+          title: 'Home Page', //Set Header Title
+          headerLeft: () => (
+            <NavigationDrawerStructure navigationProps={rootProps.navigation} />
+          ),
+          headerStyle: {
+            backgroundColor: '#d4d6dc', //Set Header color
+          },
+          headerTintColor: '#fff', //Set Header text color
+          headerTitleStyle: {
+            fontWeight: 'bold', //Set Header text style
+          },
+        }}>
+        {props => <HomePage {...props} userInfo={rootProps.userInfo} />}
+      </Stack.Screen>
+    </Stack.Navigator>
+  );
+};
+
 const ProfilePageStack = ({navigation}) => {
   return (
     <Stack.Navigator initialRouteName="ProfilePage">
@@ -51,7 +80,7 @@ const ProfilePageStack = ({navigation}) => {
             <NavigationDrawerStructure navigationProps={navigation} />
           ),
           headerStyle: {
-            backgroundColor: '#f4511e', //Set Header color
+            backgroundColor: '#d4d6dc', //Set Header color
           },
           headerTintColor: '#fff', //Set Header text color
           headerTitleStyle: {
@@ -68,7 +97,7 @@ const VideoPageStack = ({navigation}) => {
     <Stack.Navigator initialRouteName="VideoPage">
       <Stack.Screen
         name="VideoPage"
-        component={Home}
+        component={Video}
         options={{
           headerLeft: () => (
             <NavigationDrawerStructure navigationProps={navigation} />
@@ -124,7 +153,7 @@ const SignOutStack = ({navigation}) => {
           headerShown: true,
           title: 'Sign Out',
           headerStyle: {
-            backgroundColor: '#f4511e', //Set Header color
+            backgroundColor: '#d4d6dc', //Set Header color
           },
           headerTintColor: '#fff', //Set Header text color
           headerTitleStyle: {
@@ -138,7 +167,16 @@ const SignOutStack = ({navigation}) => {
   );
 };
 
-const RootNavigation = () => {
+const CustomDrawerContent = props => {
+  return (
+    <DrawerContentScrollView {...props}>
+      <DrawerItemList {...props} />
+      <DrawerItem label="Help" onPress={() => alert('Link to help')} />
+    </DrawerContentScrollView>
+  );
+};
+
+const RootNavigation = rootProps => {
   return (
     <NavigationContainer>
       <Drawer.Navigator
@@ -146,6 +184,9 @@ const RootNavigation = () => {
           activeTintColor: '#e91e63',
           itemStyle: {marginVertical: 5},
         }}>
+        <Drawer.Screen name="HomePage" options={{drawerLabel: 'Home'}}>
+          {props => <HomePageStack {...props} userInfo={rootProps.userInfo} />}
+        </Drawer.Screen>
         <Drawer.Screen
           name="ProfilePage"
           options={{drawerLabel: 'Profile'}}

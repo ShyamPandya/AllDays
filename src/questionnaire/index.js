@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, Text, Button, TextInput} from 'react-native';
 import SelectBox from 'react-native-multi-selectbox';
 import {xorBy} from 'lodash';
-import {API, Auth, graphqlOperation} from 'aws-amplify';
+import {API, graphqlOperation} from 'aws-amplify';
 import {createUser} from '../graphql/mutations';
 
 const brandData = [
@@ -117,18 +117,18 @@ const Questionnaire = props => {
   };
 
   const createDbUser = async () => {
-    const userInfo = await Auth.currentAuthenticatedUser({byParseCache: true});
+    console.log(props.userInfo);
     const newUser = {
-      id: userInfo.attributes.sub,
-      email: userInfo.attributes.email,
-      username: userName !== '' ? userName : userInfo.attributes.email,
+      id: props.userInfo.attributes.sub,
+      email: props.userInfo.attributes.email,
+      username: userName !== '' ? userName : props.userInfo.attributes.email,
       imageUri: getRandomImage(),
       brandInterest: selectedBrands.map(item => item.id),
       categoryInterest: selectedCategories.map(item => item.id),
     };
 
-    //await API.graphql(graphqlOperation(createUser, {input: newUser}));
-    //console.log('Added new user in DB');
+    await API.graphql(graphqlOperation(createUser, {input: newUser}));
+    console.log('Added new user in DB');
     console.log(newUser);
     props.callback();
   };

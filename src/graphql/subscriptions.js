@@ -13,6 +13,8 @@ export const onCreateUser = /* GraphQL */ `
           id
           videoUri
           description
+          brandTag
+          categoryTag
           userID
           createdAt
           updatedAt
@@ -38,6 +40,8 @@ export const onUpdateUser = /* GraphQL */ `
           id
           videoUri
           description
+          brandTag
+          categoryTag
           userID
           createdAt
           updatedAt
@@ -63,6 +67,8 @@ export const onDeleteUser = /* GraphQL */ `
           id
           videoUri
           description
+          brandTag
+          categoryTag
           userID
           createdAt
           updatedAt
@@ -82,6 +88,8 @@ export const onCreatePost = /* GraphQL */ `
       id
       videoUri
       description
+      brandTag
+      categoryTag
       userID
       user {
         id
@@ -107,6 +115,8 @@ export const onUpdatePost = /* GraphQL */ `
       id
       videoUri
       description
+      brandTag
+      categoryTag
       userID
       user {
         id
@@ -132,6 +142,8 @@ export const onDeletePost = /* GraphQL */ `
       id
       videoUri
       description
+      brandTag
+      categoryTag
       userID
       user {
         id

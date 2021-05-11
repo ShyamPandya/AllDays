@@ -13,6 +13,8 @@ export const getUser = /* GraphQL */ `
           id
           videoUri
           description
+          brandTag
+          categoryTag
           userID
           createdAt
           updatedAt
@@ -56,6 +58,8 @@ export const getPost = /* GraphQL */ `
       id
       videoUri
       description
+      brandTag
+      categoryTag
       userID
       user {
         id
@@ -86,6 +90,8 @@ export const listPosts = /* GraphQL */ `
         id
         videoUri
         description
+        brandTag
+        categoryTag
         userID
         user {
           id

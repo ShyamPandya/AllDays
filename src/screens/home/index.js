@@ -1,34 +1,22 @@
-import React, {useEffect, useState} from 'react';
-import {View, FlatList, Dimensions} from 'react-native';
-import Post from '../../components/Post';
-import {listPosts} from '../../graphql/queries';
-import {API, graphqlOperation} from 'aws-amplify';
+import React from 'react';
+import {View, Text, ScrollView} from 'react-native';
+import Thumbnails from '../../components/ScrollableThumbnails';
 
-const Home = () => {
-  const [posts, setPosts] = useState([]);
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const resp = await API.graphql(graphqlOperation(listPosts));
-        setPosts(resp.data.listPosts.items);
-      } catch (e) {
-        console.error(e);
-      }
-    };
-    fetchPosts();
-  }, []);
+const HomePage = props => {
   return (
     <View>
-      <FlatList
-        data={posts}
-        renderItem={({item}) => <Post post={item} />}
-        showsVerticalScrollIndicator={false}
-        snapToInterval={Dimensions.get('window').height - 20}
-        snapToAlignment={'start'}
-        decelerationRate={'fast'}
-      />
+      <Text>Home Page</Text>
+      <ScrollView scrollEventThrottle={16}>
+        <View style={{flex: 1, backgroundColor: 'white', paddingTop: 50}}>
+          <Text
+            style={{fontSize: 24, fontWeight: '700', paddingHorizontal: 20}}>
+            Brands
+          </Text>
+        </View>
+        <Thumbnails userInfo={props.userInfo} />
+      </ScrollView>
     </View>
   );
 };
 
-export default Home;
+export default HomePage;
