@@ -10,6 +10,17 @@
       "StackName": "amplify-alldays-dev-05822",
       "StackId": "arn:aws:cloudformation:us-east-2:681869236308:stack/amplify-alldays-dev-05822/57d447c0-9008-11eb-a530-062eed804cba",
       "AmplifyAppId": "d3mpjvaeyhd6i9"
+    },
+    "categories": {
+      "auth": {
+        "alldays1c43fabb": {}
+      },
+      "function": {
+        "S3Trigger86863d49": {
+          "deploymentBucketName": "amplify-alldays-dev-05822-deployment",
+          "s3Key": "amplify-builds/S3Trigger86863d49-4d734f53736a464f6146-build.zip"
+        }
+      }
     }
   }
 }

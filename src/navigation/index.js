@@ -1,11 +1,7 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {
-  createDrawerNavigator,
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem} from '@react-navigation/drawer';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 import {View, TouchableOpacity, Image} from 'react-native';
 import Video from '../screens/videos';
 import ProfilePage from '../components/Profile';
@@ -13,6 +9,8 @@ import HomePage from '../screens/home';
 import Camera from '../screens/camera';
 import CreatePost from '../screens/createPost';
 import SignOut from '../screens/signout';
+import DrawerContent from './drawerContent';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -26,20 +24,25 @@ const NavigationDrawerStructure = props => {
 
   return (
     <View style={{flexDirection: 'row'}}>
-      <TouchableOpacity onPress={() => toggleDrawer()}>
-        {/*Donute Button Image */}
-        <Image
-          source={{
-            uri:
-              'https://raw.githubusercontent.com/AboutReact/sampleresource/master/drawerWhite.png',
-          }}
-          style={{
-            width: 25,
-            height: 25,
-            marginLeft: 5,
-          }}
-        />
-      </TouchableOpacity>
+      <View>
+        <TouchableOpacity onPress={() => toggleDrawer()}>
+          {/*Donute Button Image */}
+          <Image
+            source={{
+              uri:
+                'https://raw.githubusercontent.com/AboutReact/sampleresource/master/drawerWhite.png',
+            }}
+            style={{
+              width: 25,
+              height: 25,
+              marginLeft: 5,
+            }}
+          />
+        </TouchableOpacity>
+      </View>
+      <View style={{marginLeft: 350}}>
+        <FontAwesome name={'search'} size={20} color={'white'} />
+      </View>
     </View>
   );
 };
@@ -50,17 +53,14 @@ const HomePageStack = rootProps => {
       <Stack.Screen
         name="HomePage"
         options={{
-          title: 'Home Page', //Set Header Title
+          title: '',
           headerLeft: () => (
             <NavigationDrawerStructure navigationProps={rootProps.navigation} />
           ),
           headerStyle: {
             backgroundColor: '#d4d6dc', //Set Header color
           },
-          headerTintColor: '#fff', //Set Header text color
-          headerTitleStyle: {
-            fontWeight: 'bold', //Set Header text style
-          },
+          headerTintColor: '#fff', //Set Header text color,
         }}>
         {props => <HomePage {...props} userInfo={rootProps.userInfo} />}
       </Stack.Screen>
@@ -97,22 +97,14 @@ const VideoPageStack = ({navigation}) => {
     <Stack.Navigator initialRouteName="VideoPage">
       <Stack.Screen
         name="VideoPage"
-        component={Video}
         options={{
           headerLeft: () => (
             <NavigationDrawerStructure navigationProps={navigation} />
           ),
-          /*title: 'Video Page', //Set Header Title
-          headerStyle: {
-            backgroundColor: '#f4511e', //Set Header color
-          },
-          headerTintColor: '#fff', //Set Header text color
-          headerTitleStyle: {
-            fontWeight: 'bold', //Set Header text style
-          },*/
           headerShown: false,
-        }}
-      />
+        }}>
+        {props => <Video {...props} />}
+      </Stack.Screen>
     </Stack.Navigator>
   );
 };
@@ -167,24 +159,11 @@ const SignOutStack = ({navigation}) => {
   );
 };
 
-const CustomDrawerContent = props => {
-  return (
-    <DrawerContentScrollView {...props}>
-      <DrawerItemList {...props} />
-      <DrawerItem label="Help" onPress={() => alert('Link to help')} />
-    </DrawerContentScrollView>
-  );
-};
-
 const RootNavigation = rootProps => {
   return (
     <NavigationContainer>
-      <Drawer.Navigator
-        drawerContentOptions={{
-          activeTintColor: '#e91e63',
-          itemStyle: {marginVertical: 5},
-        }}>
-        <Drawer.Screen name="HomePage" options={{drawerLabel: 'Home'}}>
+      <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
+        <Drawer.Screen name="HomePage">
           {props => <HomePageStack {...props} userInfo={rootProps.userInfo} />}
         </Drawer.Screen>
         <Drawer.Screen
@@ -192,11 +171,9 @@ const RootNavigation = rootProps => {
           options={{drawerLabel: 'Profile'}}
           component={ProfilePageStack}
         />
-        <Drawer.Screen
-          name="VideoPage"
-          options={{drawerLabel: 'Posts'}}
-          component={VideoPageStack}
-        />
+        <Drawer.Screen name="VideoPage">
+          {props => <VideoPageStack {...props} />}
+        </Drawer.Screen>
         <Drawer.Screen
           name="UploadPage"
           options={{drawerLabel: 'Upload'}}

@@ -15,7 +15,7 @@ const SignOut = () => {
   };
 
   const goBack = () => {
-    navigation.navigate('ProfilePage', {screen: 'ProfilePage'});
+    navigation.navigate('HomePage', {screen: 'HomePage'});
   };
 
   return (

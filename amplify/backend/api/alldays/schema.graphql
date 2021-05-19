@@ -1,15 +1,19 @@
-type User @model {
+type User @model @auth(rules: [{ allow: public, provider: iam }]) {
   id: ID!
   username: String!
   email: String!
   imageUri: String
   posts: [Post] @connection(keyName: "byUser", fields: ["id"])
+  brandInterest: [Int]
+  categoryInterest: [Int]
 }
 
-type Post @model @key(name: "byUser", fields: ["userID"]) {
+type Post @model @key(name: "byUser", fields: ["userID"]) @auth(rules: [{ allow: public, provider: iam }]) {
   id: ID!
   videoUri: String!
   description: String!
+  brandTag: Int
+  categoryTag: Int
 
   userID: ID!
   user: User @connection(fields: ["userID"])
