@@ -34,18 +34,13 @@ const Post = props => {
   useEffect(() => {
     const setupVideoUri = async () => {
       if (post.videoUri.startsWith('http')) {
-        console.log('Internet video');
         setVideoUri(post.videoUri);
-        console.log(post.videoUri);
       } else {
         setVideoUri(await Storage.get(post.videoUri));
       }
     };
     setupVideoUri();
   }, []);
-
-  console.log('Here');
-  console.log(videoUri);
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback onPress={onPlayPausePress}>

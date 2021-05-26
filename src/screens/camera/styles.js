@@ -13,6 +13,8 @@ const styles = StyleSheet.create({
   },
   buttonRecord: {
     alignSelf: 'center',
+    justifyContent: 'space-between',
+    marginLeft: 110,
     marginVertical: 10,
     height: 50,
     width: 50,
@@ -21,6 +23,8 @@ const styles = StyleSheet.create({
   },
   buttonStop: {
     alignSelf: 'center',
+    justifyContent: 'space-between',
+    marginLeft: 110,
     marginVertical: 20,
     height: 30,
     width: 30,

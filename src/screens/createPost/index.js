@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, TextInput, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import 'react-native-get-random-values';
 import {v4 as uuidv4} from 'uuid';
 import {Storage, API, graphqlOperation, Auth} from 'aws-amplify';
@@ -7,92 +13,7 @@ import {useRoute, useNavigation} from '@react-navigation/native';
 import styles from './styles';
 import {createPost} from '../../graphql/mutations';
 import RNPickerSelect from 'react-native-picker-select';
-
-const brandData = [
-  {
-    label: 'Glossier',
-    value: 1,
-  },
-  {
-    label: 'Drunk Elephant',
-    value: 2,
-  },
-  {
-    label: 'Tatcha',
-    value: 3,
-  },
-  {
-    label: 'Tata Harper',
-    value: 4,
-  },
-  {
-    label: 'Chanel',
-    value: 5,
-  },
-  {
-    label: "Vintner's Daughter",
-    value: 6,
-  },
-  {
-    label: 'Peter Thomas Roth',
-    value: 7,
-  },
-  {
-    label: 'Augustinus Bader',
-    value: 8,
-  },
-  {
-    label: 'Skinceuticals',
-    value: 9,
-  },
-  {
-    label: 'Biossance',
-    value: 10,
-  },
-];
-
-const categoryData = [
-  {
-    label: 'Anti-Aging',
-    value: 1,
-  },
-  {
-    label: 'Color Correction',
-    value: 2,
-  },
-  {
-    label: 'Acne',
-    value: 3,
-  },
-  {
-    label: 'Brightening',
-    value: 4,
-  },
-  {
-    label: 'Deep-cleaning',
-    value: 5,
-  },
-  {
-    label: 'Dark Circles',
-    value: 6,
-  },
-  {
-    label: 'Dermatologist Reviewed',
-    value: 7,
-  },
-  {
-    label: 'Rosacea',
-    value: 8,
-  },
-  {
-    label: 'Oil-prone/ T-zone',
-    value: 9,
-  },
-  {
-    label: 'Clean',
-    value: 10,
-  },
-];
+import {brandData, categoryData} from '../../assets/constants/index';
 
 const CreatePost = () => {
   const [description, setDescription] = useState('');
@@ -125,7 +46,7 @@ const CreatePost = () => {
     console.log('In publish');
     // create post in the database (API)
     if (!videoKey) {
-      console.warn('VIdeo is not yet uploaded');
+      console.warn('Video is not yet uploaded');
       return;
     }
 
@@ -143,7 +64,7 @@ const CreatePost = () => {
       console.log(newPost);
 
       await API.graphql(graphqlOperation(createPost, {input: newPost}));
-      navigation.navigate('ProfilePage', {screen: 'ProfilePage'});
+      navigation.navigate('HomePage', {screen: 'HomePage'});
     } catch (e) {
       console.error(e);
     }
@@ -166,13 +87,31 @@ const CreatePost = () => {
         placeholder={'Description'}
         style={styles.textInput}
       />
+      <Text style={styles.textStyle}>
+        What category does the video relate to?
+      </Text>
       <RNPickerSelect
         onValueChange={val => updateCategory(val)}
-        items={categoryData}
+        items={Object.values(categoryData)}
+        placeholder={{
+          label: 'Select a category...',
+          value: null,
+          color: 'black',
+        }}
+        style={pickerSelectStyles}
+        value={selectedCategory}
       />
+      <Text style={styles.textStyle}>What brand does the video relate to?</Text>
       <RNPickerSelect
         onValueChange={val => updateBrand(val)}
-        items={brandData}
+        items={Object.values(brandData)}
+        placeholder={{
+          label: 'Select a brand...',
+          value: null,
+          color: 'black',
+        }}
+        style={pickerSelectStyles}
+        value={selectedBrand}
       />
       <TouchableOpacity onPress={onPublish}>
         <View style={styles.button}>
@@ -182,5 +121,28 @@ const CreatePost = () => {
     </View>
   );
 };
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 4,
+    color: 'black',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 0.5,
+    borderColor: 'purple',
+    borderRadius: 8,
+    color: 'black',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+});
 
 export default CreatePost;

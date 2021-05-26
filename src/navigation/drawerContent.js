@@ -36,12 +36,6 @@ const DrawerContent = props => {
             }}
           />
           <DrawerItem
-            label={'Videos'}
-            onPress={() => {
-              props.navigation.navigate('VideoPage');
-            }}
-          />
-          <DrawerItem
             label={'Upload'}
             onPress={() => {
               props.navigation.navigate('UploadPage');

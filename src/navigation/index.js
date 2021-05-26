@@ -8,9 +8,10 @@ import ProfilePage from '../components/Profile';
 import HomePage from '../screens/home';
 import Camera from '../screens/camera';
 import CreatePost from '../screens/createPost';
+import PreviewPost from '../screens/previewPost';
 import SignOut from '../screens/signout';
 import DrawerContent from './drawerContent';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -30,18 +31,18 @@ const NavigationDrawerStructure = props => {
           <Image
             source={{
               uri:
-                'https://raw.githubusercontent.com/AboutReact/sampleresource/master/drawerWhite.png',
+                'https://raw.githubusercontent.com/AboutReact/sampleresource/master/drawer.png',
             }}
             style={{
-              width: 25,
-              height: 25,
+              width: 30,
+              height: 30,
               marginLeft: 5,
             }}
           />
         </TouchableOpacity>
       </View>
-      <View style={{marginLeft: 350}}>
-        <FontAwesome name={'search'} size={20} color={'white'} />
+      <View style={{marginLeft: 330}}>
+        <AntDesign name={'shoppingcart'} size={30} color={'black'} />
       </View>
     </View>
   );
@@ -124,6 +125,13 @@ const UploadPageStack = ({navigation}) => {
       />
       <Stack.Screen
         options={{
+          headerShown: false,
+        }}
+        name="PreviewPost"
+        component={PreviewPost}
+      />
+      <Stack.Screen
+        options={{
           headerShown: true,
           title: 'Post',
         }}
@@ -159,32 +167,46 @@ const SignOutStack = ({navigation}) => {
   );
 };
 
+const DrawerComponent = rootProps => {
+  return (
+    <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
+      <Drawer.Screen name="HomePage">
+        {props => <HomePageStack {...props} userInfo={rootProps.userInfo} />}
+      </Drawer.Screen>
+      <Drawer.Screen
+        name="ProfilePage"
+        options={{drawerLabel: 'Profile'}}
+        component={ProfilePageStack}
+      />
+      <Drawer.Screen
+        name="UploadPage"
+        options={{drawerLabel: 'Upload'}}
+        component={UploadPageStack}
+      />
+      <Drawer.Screen
+        name="SignOutPage"
+        options={{drawerLabel: 'SignOut'}}
+        component={SignOutStack}
+      />
+    </Drawer.Navigator>
+  );
+};
+
 const RootNavigation = rootProps => {
   return (
     <NavigationContainer>
-      <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
-        <Drawer.Screen name="HomePage">
-          {props => <HomePageStack {...props} userInfo={rootProps.userInfo} />}
-        </Drawer.Screen>
-        <Drawer.Screen
-          name="ProfilePage"
-          options={{drawerLabel: 'Profile'}}
-          component={ProfilePageStack}
+      <Stack.Navigator initialRouteName="Drawer">
+        <Stack.Screen name="Drawer" options={{headerShown: false}}>
+          {props => (
+            <DrawerComponent {...props} userInfo={rootProps.userInfo} />
+          )}
+        </Stack.Screen>
+        <Stack.Screen
+          name="VideoPage"
+          options={{headerShown: false}}
+          component={Video}
         />
-        <Drawer.Screen name="VideoPage">
-          {props => <VideoPageStack {...props} />}
-        </Drawer.Screen>
-        <Drawer.Screen
-          name="UploadPage"
-          options={{drawerLabel: 'Upload'}}
-          component={UploadPageStack}
-        />
-        <Drawer.Screen
-          name="SignOutPage"
-          options={{drawerLabel: 'SignOut'}}
-          component={SignOutStack}
-        />
-      </Drawer.Navigator>
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };

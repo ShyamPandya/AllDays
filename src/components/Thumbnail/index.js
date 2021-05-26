@@ -3,14 +3,16 @@ import {ImageBackground, Text, TouchableOpacity, View} from 'react-native';
 import {Storage} from 'aws-amplify';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
+import {brandData, categoryData} from "../../assets/constants";
 
 const Thumbnail = props => {
-  //const navigation = useNavigation();
   const [imgUri, setImgUri] = useState('');
+  const navigation = useNavigation();
 
   const playVideos = () => {
-    props.navigation.navigate('VideoPage', {
-      someParam: 'param',
+    navigation.navigate('VideoPage', {
+      screen: 'VideoPage',
+      posts: props.posts,
     });
   };
 
@@ -22,31 +24,38 @@ const Thumbnail = props => {
         ),
       );
     };
-    setImgUriData();
+    if (props.posts && props.posts.length > 0) {
+      setImgUriData();
+    }
   });
 
   return imgUri === '' ? null : (
     <View
       style={{
-        marginLeft: 20,
-        borderWidth: 0.5,
-        borderColor: 'black',
+        marginLeft: 30,
+        marginTop: 20,
       }}>
-      <View style={{flex: 2}}>
+      <View style={{flex: 2, borderWidth: 0.5, borderColor: 'black'}}>
         <ImageBackground
           source={{uri: imgUri}}
-          style={{height: 130, width: 130}}
+          style={{height: props.height, width: props.width}}
           resizeMode="cover">
           <TouchableOpacity
-            style={{alignSelf: 'center', marginTop: 55}}
+            style={{alignSelf: 'center', marginTop: props.height / 2}}
             onPress={playVideos}>
             <AntDesign name={'playcircleo'} size={40} color="white" />
           </TouchableOpacity>
         </ImageBackground>
       </View>
-      <View>
-        <Text style={{color: 'black'}}> {props.posts[0].brandTag} </Text>
-      </View>
+      {props.showType ? (
+        <View>
+          <Text style={{color: 'black'}}>
+            {props.type === 'brand'
+              ? brandData[props.posts[0].brandTag]
+              : categoryData[props.posts[0].brandTag]}
+          </Text>
+        </View>
+      ) : null}
     </View>
   );
 };

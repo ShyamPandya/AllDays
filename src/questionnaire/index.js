@@ -4,92 +4,7 @@ import SelectBox from 'react-native-multi-selectbox';
 import {xorBy} from 'lodash';
 import {API, graphqlOperation} from 'aws-amplify';
 import {createUser} from '../graphql/mutations';
-
-const brandData = [
-  {
-    item: 'Glossier',
-    id: 1,
-  },
-  {
-    item: 'Drunk Elephant',
-    id: 2,
-  },
-  {
-    item: 'Tatcha',
-    id: 3,
-  },
-  {
-    item: 'Tata Harper',
-    id: 4,
-  },
-  {
-    item: 'Chanel',
-    id: 5,
-  },
-  {
-    item: "Vintner's Daughter",
-    id: 6,
-  },
-  {
-    item: 'Peter Thomas Roth',
-    id: 7,
-  },
-  {
-    item: 'Augustinus Bader',
-    id: 8,
-  },
-  {
-    item: 'Skinceuticals',
-    id: 9,
-  },
-  {
-    item: 'Biossance',
-    id: 10,
-  },
-];
-
-const categoryData = [
-  {
-    item: 'Anti-Aging',
-    id: 1,
-  },
-  {
-    item: 'Color Correction',
-    id: 2,
-  },
-  {
-    item: 'Acne',
-    id: 3,
-  },
-  {
-    item: 'Brightening',
-    id: 4,
-  },
-  {
-    item: 'Deep-cleaning',
-    id: 5,
-  },
-  {
-    item: 'Dark Circles',
-    id: 6,
-  },
-  {
-    item: 'Dermatologist Reviewed',
-    id: 7,
-  },
-  {
-    item: 'Rosacea',
-    id: 8,
-  },
-  {
-    item: 'Oil-prone/ T-zone',
-    id: 9,
-  },
-  {
-    item: 'Clean',
-    id: 10,
-  },
-];
+import {brandData, categoryData} from '../assets/constants/index';
 
 const randomImages = [
   'https://hieumobile.com/wp-content/uploads/avatar-among-us-2.jpg',
@@ -150,7 +65,7 @@ const Questionnaire = props => {
       <View>
         <SelectBox
           label="Brands interested in"
-          options={brandData}
+          options={Object.values(brandData)}
           selectedValues={selectedBrands}
           onMultiSelect={onMultiChangeBrand()}
           onTapClose={onMultiChangeBrand()}
@@ -160,7 +75,7 @@ const Questionnaire = props => {
       <View>
         <SelectBox
           label="Categories interested in"
-          options={categoryData}
+          options={Object.values(categoryData)}
           selectedValues={selectedCategories}
           onMultiSelect={onMultiChangeCategory()}
           onTapClose={onMultiChangeCategory()}

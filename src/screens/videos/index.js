@@ -3,12 +3,17 @@ import {View, FlatList, Dimensions} from 'react-native';
 import Post from '../../components/Post';
 import {listPosts} from '../../graphql/queries';
 import {API, graphqlOperation} from 'aws-amplify';
+import { useNavigation, useRoute } from "@react-navigation/native";
 
-const Video = props => {
+const Video = () => {
   const [posts, setPosts] = useState([]);
-  useEffect(() => {
-    const fetchPosts = async () => {
 
+  const route = useRoute();
+
+  useEffect(() => {
+    console.log(route.params);
+    console.log(route.params.posts);
+    const fetchPosts = async () => {
       try {
         const resp = await API.graphql(graphqlOperation(listPosts));
         setPosts(resp.data.listPosts.items);
@@ -16,9 +21,9 @@ const Video = props => {
         console.error(e);
       }
     };
-    console.log(props.route.params);
-    fetchPosts();
-  }, []);
+    setPosts(route.params.posts);
+    //fetchPosts();
+  }, [route.params.posts]);
   return (
     <View>
       <FlatList
