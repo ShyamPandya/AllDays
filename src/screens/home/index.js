@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, FlatList} from 'react-native';
 import {API, graphqlOperation} from 'aws-amplify';
-import {getUser, listPosts} from '../../graphql/queries';
+import {listPosts} from '../../graphql/queries';
 import Thumbnail from '../../components/Thumbnail';
 
 const HomePage = props => {
@@ -12,10 +12,6 @@ const HomePage = props => {
   useEffect(() => {
     const setStateData = async () => {
       try {
-        const userDb = await API.graphql(
-          graphqlOperation(getUser, {id: props.userInfo.attributes.sub}),
-        );
-
         const allPosts = await API.graphql(graphqlOperation(listPosts));
         if (
           allPosts.data.listPosts.items &&
@@ -27,7 +23,7 @@ const HomePage = props => {
           let ops = {};
 
           postsList.forEach(post => {
-            if (userDb.data.getUser.brandInterest.includes(post.brandTag)) {
+            if (props.userInfo.brandInterest.includes(post.brandTag)) {
               if (post.brandTag in bps) {
                 bps[post.brandTag].push(post);
               } else {
@@ -43,9 +39,7 @@ const HomePage = props => {
                 ops[key] = [post];
               }
             }
-            if (
-              userDb.data.getUser.categoryInterest.includes(post.categoryTag)
-            ) {
+            if (props.userInfo.categoryInterest.includes(post.categoryTag)) {
               if (post.categoryTag in cps) {
                 cps[post.categoryTag].push(post);
               } else {
@@ -101,6 +95,8 @@ const HomePage = props => {
               width={130}
               showType={true}
               type={'brand'}
+              leftMargin={30}
+              topMargin={20}
             />
           )}
           showsHorizontalScrollIndicator={false}
@@ -118,6 +114,8 @@ const HomePage = props => {
               width={130}
               showType={true}
               type={'category'}
+              leftMargin={30}
+              topMargin={20}
             />
           )}
           showsHorizontalScrollIndicator={false}
@@ -140,7 +138,14 @@ const HomePage = props => {
       <FlatList
         data={otherPosts}
         renderItem={({item}) => (
-          <Thumbnail posts={item} height={250} width={160} showType={false} />
+          <Thumbnail
+            posts={item}
+            height={250}
+            width={160}
+            showType={false}
+            leftMargin={30}
+            topMargin={20}
+          />
         )}
         ListHeaderComponent={TempComponent}
         horizontal={false}

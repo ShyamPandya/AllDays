@@ -3,7 +3,7 @@ import {ImageBackground, Text, TouchableOpacity, View} from 'react-native';
 import {Storage} from 'aws-amplify';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
-import {brandData, categoryData} from "../../assets/constants";
+import {brandData, categoryData} from '../../assets/constants';
 
 const Thumbnail = props => {
   const [imgUri, setImgUri] = useState('');
@@ -32,8 +32,8 @@ const Thumbnail = props => {
   return imgUri === '' ? null : (
     <View
       style={{
-        marginLeft: 30,
-        marginTop: 20,
+        marginLeft: props.leftMargin,
+        marginTop: props.topMargin,
       }}>
       <View style={{flex: 2, borderWidth: 0.5, borderColor: 'black'}}>
         <ImageBackground
@@ -49,11 +49,15 @@ const Thumbnail = props => {
       </View>
       {props.showType ? (
         <View>
-          <Text style={{color: 'black'}}>
-            {props.type === 'brand'
-              ? brandData[props.posts[0].brandTag]
-              : categoryData[props.posts[0].brandTag]}
-          </Text>
+          {props.type === 'brand' ? (
+            <Text style={{color: 'black'}}>
+              {brandData[props.posts[0].brandTag].item}
+            </Text>
+          ) : (
+            <Text style={{color: 'black'}}>
+              {categoryData[props.posts[0].categoryTag].item}
+            </Text>
+          )}
         </View>
       ) : null}
     </View>

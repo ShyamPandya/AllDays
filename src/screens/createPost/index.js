@@ -18,8 +18,8 @@ import {brandData, categoryData} from '../../assets/constants/index';
 const CreatePost = () => {
   const [description, setDescription] = useState('');
   const [videoKey, setVideoKey] = useState(null);
-  const [selectedBrand, setSelectedBrand] = useState(-1);
-  const [selectedCategory, setSelectedCategory] = useState(-1);
+  const [selectedBrand, setSelectedBrand] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   const route = useRoute();
   const navigation = useNavigation();

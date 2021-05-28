@@ -45,7 +45,7 @@ const Questionnaire = props => {
     await API.graphql(graphqlOperation(createUser, {input: newUser}));
     console.log('Added new user in DB');
     console.log(newUser);
-    props.callback();
+    props.callback(newUser);
   };
 
   const updateUserName = text => {

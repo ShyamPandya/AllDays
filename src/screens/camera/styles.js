@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   buttonStop: {
     alignSelf: 'center',
     justifyContent: 'space-between',
-    marginLeft: 110,
+    marginLeft: 190,
     marginVertical: 20,
     height: 30,
     width: 30,

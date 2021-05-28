@@ -69,42 +69,18 @@ const HomePageStack = rootProps => {
   );
 };
 
-const ProfilePageStack = ({navigation}) => {
+const ProfilePageStack = rootProps => {
   return (
     <Stack.Navigator initialRouteName="ProfilePage">
       <Stack.Screen
         name="ProfilePage"
-        component={ProfilePage}
-        options={{
-          title: 'Profile Page', //Set Header Title
-          headerLeft: () => (
-            <NavigationDrawerStructure navigationProps={navigation} />
-          ),
-          headerStyle: {
-            backgroundColor: '#d4d6dc', //Set Header color
-          },
-          headerTintColor: '#fff', //Set Header text color
-          headerTitleStyle: {
-            fontWeight: 'bold', //Set Header text style
-          },
-        }}
-      />
-    </Stack.Navigator>
-  );
-};
-
-const VideoPageStack = ({navigation}) => {
-  return (
-    <Stack.Navigator initialRouteName="VideoPage">
-      <Stack.Screen
-        name="VideoPage"
         options={{
           headerLeft: () => (
-            <NavigationDrawerStructure navigationProps={navigation} />
+            <NavigationDrawerStructure navigationProps={rootProps.navigation} />
           ),
           headerShown: false,
         }}>
-        {props => <Video {...props} />}
+        {props => <ProfilePage {...props} userInfo={rootProps.userInfo} />}
       </Stack.Screen>
     </Stack.Navigator>
   );
@@ -173,11 +149,9 @@ const DrawerComponent = rootProps => {
       <Drawer.Screen name="HomePage">
         {props => <HomePageStack {...props} userInfo={rootProps.userInfo} />}
       </Drawer.Screen>
-      <Drawer.Screen
-        name="ProfilePage"
-        options={{drawerLabel: 'Profile'}}
-        component={ProfilePageStack}
-      />
+      <Drawer.Screen name="ProfilePage">
+        {props => <ProfilePageStack {...props} userInfo={rootProps.userInfo} />}
+      </Drawer.Screen>
       <Drawer.Screen
         name="UploadPage"
         options={{drawerLabel: 'Upload'}}

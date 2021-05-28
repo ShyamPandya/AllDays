@@ -21,7 +21,6 @@ const App: () => React$Node = () => {
   useEffect(() => {
     const fetchUser = async () => {
       const userInfo = await Auth.currentAuthenticatedUser({byParseCache: true})
-      setLoggedInUser(userInfo);
       const userDb = await API.graphql(
         graphqlOperation(
           getUser,
@@ -30,17 +29,21 @@ const App: () => React$Node = () => {
       );
       if (userDb.data.getUser) {
         console.log("User already exists in DB");
+        console.log(userDb);
+        setLoggedInUser(userDb.data.getUser);
         setNewUser(false);
       } else {
         console.log("User doesn't exists in DB");
         setNewUser(true);
+        setLoggedInUser(userInfo);
       }
     };
     fetchUser();
   }, []);
 
-  const updateUserStatus = () => {
+  const updateUserStatus = userInfo => {
     setNewUser(!newUser);
+    setLoggedInUser(userInfo);
   };
 
   return (
