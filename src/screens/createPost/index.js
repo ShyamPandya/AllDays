@@ -19,7 +19,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const CreatePost = () => {
   const [description, setDescription] = useState('');
-  const [videoKey, setVideoKey] = useState(null);
   const [selectedBrand, setSelectedBrand] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
@@ -36,40 +35,42 @@ const CreatePost = () => {
       console.log(blob);
 
       const filename = `${uuidv4()}.mp4`;
+      console.log(filename);
       const s3Response = await Storage.put(filename, blob);
-      setVideoKey(s3Response.key);
       console.log('Stored');
+      return s3Response.key;
     } catch (e) {
       console.error(e);
     }
+    return null;
   };
 
   const onPublish = async () => {
-    await uploadToStorage(route.params.videoUri);
+    const videoKey = await uploadToStorage(route.params.videoUri);
     console.log('In publish');
     // create post in the database (API)
-    if (!videoKey) {
+    if (videoKey) {
+      try {
+        const userInfo = await Auth.currentAuthenticatedUser();
+
+        const newPost = {
+          videoUri: videoKey,
+          description: description,
+          userID: userInfo.attributes.sub,
+          brandTag: selectedBrand,
+          categoryTag: selectedCategory,
+        };
+
+        console.log(newPost);
+
+        await API.graphql(graphqlOperation(createPost, {input: newPost}));
+        navigation.navigate('HomePage', {screen: 'HomePage'});
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
       console.warn('Video is not yet uploaded');
       return;
-    }
-
-    try {
-      const userInfo = await Auth.currentAuthenticatedUser();
-
-      const newPost = {
-        videoUri: videoKey,
-        description: description,
-        userID: userInfo.attributes.sub,
-        brandTag: selectedBrand,
-        categoryTag: selectedCategory,
-      };
-
-      console.log(newPost);
-
-      await API.graphql(graphqlOperation(createPost, {input: newPost}));
-      navigation.navigate('HomePage', {screen: 'HomePage'});
-    } catch (e) {
-      console.error(e);
     }
   };
 

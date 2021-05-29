@@ -4,9 +4,9 @@ import Thumbnail from '../Thumbnail';
 import styles from './styles';
 import {API, graphqlOperation} from 'aws-amplify';
 import {listPosts} from '../../graphql/queries';
-import { useNavigation, useRoute } from "@react-navigation/native";
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {useIsFocused} from '@react-navigation/native';
-import Ionicons from "react-native-vector-icons/Ionicons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const ProfilePage = props => {
   const [posts, setPosts] = useState([]);
@@ -38,17 +38,13 @@ const ProfilePage = props => {
       }
     };
     if (isFocused) {
-      if (route && route.params && route.params.userInfo) {
-        setUser(route.params.userInfo);
-        setUserPosts(route.params.userInfo);
-      } else {
-        setUser(props.userInfo);
-        setUserPosts(props.userInfo);
-      }
+      setUser(route.params.userInfo);
+      setUserPosts(route.params.userInfo);
     } else {
       setUser(null);
+      setPosts([]);
     }
-  }, [isFocused]);
+  }, [isFocused, route.params.userInfo]);
 
   const goBackSafe = () => {
     // Traverse parent stack until we can go back

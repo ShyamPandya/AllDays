@@ -136,7 +136,10 @@ const SignOutStack = ({navigation}) => {
 
 const DrawerComponent = rootProps => {
   return (
-    <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
+    <Drawer.Navigator
+      drawerContent={props => (
+        <DrawerContent {...props} userInfo={rootProps.userInfo} />
+      )}>
       <Drawer.Screen name="HomePage">
         {props => <HomePageStack {...props} userInfo={rootProps.userInfo} />}
       </Drawer.Screen>

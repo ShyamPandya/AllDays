@@ -1,10 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  TouchableWithoutFeedback,
-  Text,
-  Image,
-} from 'react-native';
+import {View, TouchableWithoutFeedback, Text, Image} from 'react-native';
 import Video from 'react-native-video';
 import styles from './styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
