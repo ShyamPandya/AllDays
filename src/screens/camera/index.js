@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {View, TouchableOpacity} from 'react-native';
+import { View, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
 import {RNCamera} from 'react-native-camera';
 
 import styles from './styles';
@@ -30,6 +30,18 @@ const Camera = () => {
     }
   };
 
+  const goBackSafe = () => {
+    // Traverse parent stack until we can go back
+    let parent = navigation;
+    while (
+      parent.dangerouslyGetState()?.index === 0 &&
+      parent.dangerouslyGetParent()
+    ) {
+      parent = parent.dangerouslyGetParent();
+    }
+    parent?.goBack();
+  };
+
   return (
     <View style={styles.container}>
       <RNCamera
@@ -39,6 +51,13 @@ const Camera = () => {
         style={styles.preview}
         type={cameraType}
       />
+      <View style={{position: 'absolute'}}>
+        <View style={{paddingTop: 20, paddingLeft: 20}}>
+          <TouchableWithoutFeedback onPress={goBackSafe}>
+            <Ionicons name={'arrow-back'} size={30} color="grey" />
+          </TouchableWithoutFeedback>
+        </View>
+      </View>
       <View style={{flexDirection: 'row'}}>
         {!isRecording && (
           <TouchableOpacity

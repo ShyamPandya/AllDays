@@ -20,9 +20,21 @@ const SignOut = () => {
 
   return (
     <View>
-      <Text>Are you sure you want to sign out?</Text>
-      <Button onPress={logOut} title="Yes" color="#841584" />
-      <Button onPress={goBack} title="No" color="#841584" />
+      <Text
+        style={{
+          fontFamily: '',
+          fontSize: 30,
+          paddingTop: 20,
+          paddingBottom: 20,
+        }}>
+        Are you sure you want to sign out?
+      </Text>
+      <View style={{paddingTop: 20, paddingBottom: 20}}>
+        <Button onPress={logOut} title="Yes" color="#727563" />
+      </View>
+      <View style={{paddingTop: 20, paddingBottom: 20}}>
+        <Button onPress={goBack} title="No" color="grey" />
+      </View>
     </View>
   );
 };

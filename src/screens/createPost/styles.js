@@ -8,8 +8,10 @@ const styles = StyleSheet.create({
   textInput: {
     margin: 10,
     backgroundColor: 'white',
+    color: 'black',
   },
   textStyle: {
+    fontFamily: '',
     marginTop: 5,
     marginBottom: 10,
     fontSize: 20,

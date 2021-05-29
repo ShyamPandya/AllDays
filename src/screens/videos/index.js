@@ -11,8 +11,6 @@ const Video = () => {
   const route = useRoute();
 
   useEffect(() => {
-    console.log(route.params);
-    console.log(route.params.posts);
     const fetchPosts = async () => {
       try {
         const resp = await API.graphql(graphqlOperation(listPosts));
@@ -30,7 +28,7 @@ const Video = () => {
         data={posts}
         renderItem={({item}) => <Post post={item} />}
         showsVerticalScrollIndicator={false}
-        snapToInterval={Dimensions.get('window').height - 20}
+        snapToInterval={Dimensions.get('window').height}
         snapToAlignment={'start'}
         decelerationRate={'fast'}
       />

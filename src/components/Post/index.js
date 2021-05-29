@@ -4,43 +4,54 @@ import {
   TouchableWithoutFeedback,
   Text,
   Image,
-  TouchableOpacity,
 } from 'react-native';
 import Video from 'react-native-video';
 import styles from './styles';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Fontisto from 'react-native-vector-icons/Fontisto';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Storage} from 'aws-amplify';
+import {useNavigation} from '@react-navigation/native';
 
 const Post = props => {
-  const [post, setPost] = useState(props.post);
   const [paused, setPaused] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
   const [videoUri, setVideoUri] = useState('');
+  const navigation = useNavigation();
 
   const onPlayPausePress = () => {
     setPaused(!paused);
   };
-  const likePress = () => {
-    const likeChange = isLiked ? -1 : 1;
-    setPost({
-      ...post,
-      likes: post.likes + likeChange,
+
+  const openUserProfile = () => {
+    navigation.navigate('ProfilePage', {
+      screen: 'ProfilePage',
+      params: {
+        userInfo: props.post.user,
+      },
     });
-    setIsLiked(!isLiked);
   };
 
   useEffect(() => {
     const setupVideoUri = async () => {
-      if (post.videoUri.startsWith('http')) {
-        setVideoUri(post.videoUri);
+      if (props.post.videoUri.startsWith('http')) {
+        setVideoUri(props.post.videoUri);
       } else {
-        setVideoUri(await Storage.get(post.videoUri));
+        setVideoUri(await Storage.get(props.post.videoUri));
       }
     };
     setupVideoUri();
   }, []);
+
+  const goBackSafe = () => {
+    // Traverse parent stack until we can go back
+    let parent = navigation;
+    while (
+      parent.dangerouslyGetState()?.index === 0 &&
+      parent.dangerouslyGetParent()
+    ) {
+      parent = parent.dangerouslyGetParent();
+    }
+    parent?.goBack();
+  };
+
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback onPress={onPlayPausePress}>
@@ -52,34 +63,25 @@ const Post = props => {
           paused={paused}
         />
       </TouchableWithoutFeedback>
-      <View style={styles.uiContainer}>
-        <View style={styles.rightContainer}>
+      <View style={styles.uiContainerTop}>
+        <View style={{paddingTop: 20, paddingLeft: 20}}>
+          <TouchableWithoutFeedback onPress={goBackSafe}>
+            <Ionicons name={'arrow-back'} size={30} color="grey" />
+          </TouchableWithoutFeedback>
+        </View>
+      </View>
+      <View style={styles.uiContainerBottom}>
+        <View style={styles.bottomContainer}>
           <Image
             style={styles.profilePicture}
-            source={{uri: post.user.imageUri}}
+            source={{uri: props.post.user.imageUri}}
           />
-          <TouchableOpacity style={styles.iconContainer} onPress={likePress}>
-            <AntDesign
-              name={'heart'}
-              size={40}
-              color={isLiked ? 'red' : 'white'}
-            />
-            <Text style={{...styles.counter, alignSelf: 'center'}}>
-              {post.likes}
-            </Text>
-          </TouchableOpacity>
-          <View style={styles.iconContainer}>
-            <FontAwesome name={'commenting'} size={40} color="white" />
-            <Text style={styles.counter}>{post.comments}</Text>
+          <View>
+            <TouchableWithoutFeedback onPress={openUserProfile}>
+              <Text style={styles.handle}>@{props.post.user.username}</Text>
+            </TouchableWithoutFeedback>
+            <Text style={styles.description}>{props.post.description}</Text>
           </View>
-          <View style={styles.iconContainer}>
-            <Fontisto name={'share-a'} size={35} color="white" />
-            <Text style={styles.counter}>{post.shares}</Text>
-          </View>
-        </View>
-        <View style={styles.bottomContainer}>
-          <Text style={styles.handle}>@{post.user.username}</Text>
-          <Text style={styles.description}>{post.description}</Text>
         </View>
       </View>
     </View>
@@ -87,3 +89,36 @@ const Post = props => {
 };
 
 export default Post;
+
+/*
+
+ const likePress = () => {
+    const likeChange = isLiked ? -1 : 1;
+    setPost({
+      ...post,
+      likes: post.likes + likeChange,
+    });
+    setIsLiked(!isLiked);
+  };
+
+ <View style={styles.rightContainer}>
+   <TouchableOpacity style={styles.iconContainer} onPress={likePress}>
+     <AntDesign
+       name={'heart'}
+       size={40}
+       color={isLiked ? 'red' : 'white'}
+     />
+     <Text style={{...styles.counter, alignSelf: 'center'}}>
+       {post.likes}
+     </Text>
+   </TouchableOpacity>
+   <View style={styles.iconContainer}>
+     <FontAwesome name={'commenting'} size={40} color="white" />
+     <Text style={styles.counter}>{post.comments}</Text>
+   </View>
+   <View style={styles.iconContainer}>
+     <Fontisto name={'share-a'} size={35} color="white" />
+     <Text style={styles.counter}>{post.shares}</Text>
+   </View>
+ </View>
+*/

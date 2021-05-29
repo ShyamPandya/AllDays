@@ -32,7 +32,6 @@ const Questionnaire = props => {
   };
 
   const createDbUser = async () => {
-    console.log(props.userInfo);
     const newUser = {
       id: props.userInfo.attributes.sub,
       email: props.userInfo.attributes.email,
@@ -44,7 +43,6 @@ const Questionnaire = props => {
 
     await API.graphql(graphqlOperation(createUser, {input: newUser}));
     console.log('Added new user in DB');
-    console.log(newUser);
     props.callback(newUser);
   };
 
@@ -54,35 +52,63 @@ const Questionnaire = props => {
 
   return (
     <View>
-      <Text>Questionnaire</Text>
-      <TextInput
-        underlineColorAndroid="transparent"
-        placeholder="Username"
-        placeholderTextColor="#9a73ef"
-        autoCapitalize="none"
-        onChangeText={updateUserName}
-      />
-      <View>
+      <Text
+        style={{paddingTop: 20, paddingLeft: 20, fontSize: 30, fontFamily: ''}}>
+        Some additional details
+      </Text>
+      <View style={{paddingTop: 20, paddingLeft: 20}}>
+        <Text style={{fontSize: 20, fontFamily: ''}}>
+          Enter you user handle
+        </Text>
+        <TextInput
+          underlineColorAndroid="transparent"
+          placeholder={'Username'}
+          placeholderTextColor={'black'}
+          autoCapitalize="none"
+          onChangeText={updateUserName}
+          color={'black'}
+        />
+      </View>
+      <View style={{paddingTop: 20, paddingLeft: 20}}>
+        <Text style={{fontSize: 20, fontFamily: ''}}>
+          What brands are you interested in?
+        </Text>
         <SelectBox
-          label="Brands interested in"
+          label=""
           options={Object.values(brandData)}
           selectedValues={selectedBrands}
           onMultiSelect={onMultiChangeBrand()}
           onTapClose={onMultiChangeBrand()}
           isMulti
+          arrowIconColor={'#727563'}
+          searchIconColor={'#727563'}
+          toggleIconColor={'#727563'}
+          multiOptionContainerStyle={{backgroundColor: '#727563'}}
         />
       </View>
-      <View>
+      <View style={{paddingTop: 20, paddingLeft: 20}}>
+        <Text style={{fontSize: 20, fontFamily: ''}}>
+          What categories are you interested in?
+        </Text>
         <SelectBox
-          label="Categories interested in"
+          label=""
           options={Object.values(categoryData)}
           selectedValues={selectedCategories}
           onMultiSelect={onMultiChangeCategory()}
           onTapClose={onMultiChangeCategory()}
           isMulti
+          arrowIconColor={'#727563'}
+          searchIconColor={'#727563'}
+          toggleIconColor={'#727563'}
+          multiOptionContainerStyle={{backgroundColor: '#727563'}}
         />
       </View>
-      <Button title="Submit" color="#841584" onPress={() => createDbUser()} />
+      <Button
+        style={{paddingTop: 20, paddingLeft: 20}}
+        title={'Submit'}
+        color="#727563"
+        onPress={() => createDbUser()}
+      />
     </View>
   );
 };

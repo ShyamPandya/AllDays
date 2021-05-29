@@ -50,11 +50,11 @@ const Thumbnail = props => {
       {props.showType ? (
         <View>
           {props.type === 'brand' ? (
-            <Text style={{color: 'black'}}>
+            <Text style={{color: 'black', fontFamily: ''}}>
               {brandData[props.posts[0].brandTag].item}
             </Text>
           ) : (
-            <Text style={{color: 'black'}}>
+            <Text style={{color: 'black', fontFamily: ''}}>
               {categoryData[props.posts[0].categoryTag].item}
             </Text>
           )}

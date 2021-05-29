@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
   StyleSheet,
+  Button,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import 'react-native-get-random-values';
 import {v4 as uuidv4} from 'uuid';
@@ -14,6 +15,7 @@ import styles from './styles';
 import {createPost} from '../../graphql/mutations';
 import RNPickerSelect from 'react-native-picker-select';
 import {brandData, categoryData} from '../../assets/constants/index';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const CreatePost = () => {
   const [description, setDescription] = useState('');
@@ -25,24 +27,25 @@ const CreatePost = () => {
   const navigation = useNavigation();
 
   const uploadToStorage = async imagePath => {
+    console.log('Trying to upload to S3');
     try {
       const response = await fetch(imagePath);
+      console.log(response);
 
       const blob = await response.blob();
+      console.log(blob);
 
       const filename = `${uuidv4()}.mp4`;
       const s3Response = await Storage.put(filename, blob);
       setVideoKey(s3Response.key);
+      console.log('Stored');
     } catch (e) {
       console.error(e);
     }
   };
 
-  useEffect(() => {
-    uploadToStorage(route.params.videoUri);
-  }, [route.params.videoUri]);
-
   const onPublish = async () => {
+    await uploadToStorage(route.params.videoUri);
     console.log('In publish');
     // create post in the database (API)
     if (!videoKey) {
@@ -78,13 +81,31 @@ const CreatePost = () => {
     setSelectedBrand(val);
   };
 
+  const goBackSafe = () => {
+    // Traverse parent stack until we can go back
+    let parent = navigation;
+    while (
+      parent.dangerouslyGetState()?.index === 0 &&
+      parent.dangerouslyGetParent()
+    ) {
+      parent = parent.dangerouslyGetParent();
+    }
+    parent?.goBack();
+  };
+
   return (
     <View style={styles.container}>
+      <View style={{paddingTop: 20, paddingLeft: 20}}>
+        <TouchableWithoutFeedback onPress={goBackSafe}>
+          <Ionicons name={'arrow-back'} size={30} color="grey" />
+        </TouchableWithoutFeedback>
+      </View>
       <TextInput
         value={description}
         onChangeText={setDescription}
         numberOfLines={5}
         placeholder={'Description'}
+        placeholderTextColor={'black'}
         style={styles.textInput}
       />
       <Text style={styles.textStyle}>
@@ -113,11 +134,12 @@ const CreatePost = () => {
         style={pickerSelectStyles}
         value={selectedBrand}
       />
-      <TouchableOpacity onPress={onPublish}>
-        <View style={styles.button}>
-          <Text style={styles.buttonText}>Publish</Text>
-        </View>
-      </TouchableOpacity>
+      <Button
+        style={{paddingTop: 20, paddingLeft: 20}}
+        title={'Publish'}
+        color="#727563"
+        onPress={() => onPublish()}
+      />
     </View>
   );
 };

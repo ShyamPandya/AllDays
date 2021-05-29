@@ -12,9 +12,13 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  uiContainer: {
-    height: '100%',
+  uiContainerBottom: {
+    height: '50%',
     justifyContent: 'flex-end',
+  },
+  uiContainerTop: {
+    height: '50%',
+    justifyContent: 'flex-start',
   },
   bottomContainer: {
     flexDirection: 'row-reverse',
@@ -25,6 +29,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   confirmText: {
+    fontFamily: '',
     alignSelf: 'flex-end',
     color: 'white',
     padding: 20,

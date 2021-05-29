@@ -29,7 +29,6 @@ const App: () => React$Node = () => {
       );
       if (userDb.data.getUser) {
         console.log("User already exists in DB");
-        console.log(userDb);
         setLoggedInUser(userDb.data.getUser);
         setNewUser(false);
       } else {

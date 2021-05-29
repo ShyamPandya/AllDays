@@ -61,7 +61,6 @@ const HomePageStack = rootProps => {
           headerStyle: {
             backgroundColor: '#d4d6dc', //Set Header color
           },
-          headerTintColor: '#fff', //Set Header text color,
         }}>
         {props => <HomePage {...props} userInfo={rootProps.userInfo} />}
       </Stack.Screen>
@@ -93,9 +92,6 @@ const UploadPageStack = ({navigation}) => {
         name="UploadPage"
         component={Camera}
         options={{
-          headerLeft: () => (
-            <NavigationDrawerStructure navigationProps={navigation} />
-          ),
           headerShown: false,
         }}
       />
@@ -108,8 +104,7 @@ const UploadPageStack = ({navigation}) => {
       />
       <Stack.Screen
         options={{
-          headerShown: true,
-          title: 'Post',
+          headerShown: false,
         }}
         name="CreatePost"
         component={CreatePost}
@@ -127,13 +122,9 @@ const SignOutStack = ({navigation}) => {
             <NavigationDrawerStructure navigationProps={navigation} />
           ),
           headerShown: true,
-          title: 'Sign Out',
+          title: '',
           headerStyle: {
             backgroundColor: '#d4d6dc', //Set Header color
-          },
-          headerTintColor: '#fff', //Set Header text color
-          headerTitleStyle: {
-            fontWeight: 'bold', //Set Header text style
           },
         }}
         name="SignOut"

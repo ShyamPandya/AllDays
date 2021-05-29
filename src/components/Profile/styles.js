@@ -19,11 +19,9 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     borderWidth: 2,
     borderColor: '#fff',
-    marginTop: 10,
     marginLeft: 20,
   },
   verticalLine: {
-    marginTop: 10,
     marginLeft: 20,
     marginRight: 20,
     height: '90%',
@@ -39,7 +37,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#909090',
   },
   userHandle: {
-    marginTop: 20,
+    fontFamily: '',
     color: 'black',
     fontSize: 30,
     fontWeight: 'bold',
