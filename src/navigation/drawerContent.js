@@ -32,8 +32,8 @@ const DrawerContent = props => {
           <DrawerItem
             label={'Profile'}
             onPress={() => {
-              props.navigation.navigate('ProfilePage', {
-                screen: 'ProfilePage',
+              props.navigation.navigate('UserProfilePage', {
+                screen: 'UserProfilePage',
                 params: {
                   userInfo: props.userInfo,
                 },

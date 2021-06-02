@@ -31,7 +31,11 @@ const PostPreview = () => {
   };
 
   const postVideo = () => {
-    navigation.navigate('CreatePost', {videoUri: route.params.videoUri});
+    console.log('Not going');
+    navigation.push('CreatePost', {
+      videoUri: route.params.videoUri,
+      userId: route.params.userId,
+    });
   };
 
   const goBackSafe = () => {
@@ -69,7 +73,7 @@ const PostPreview = () => {
           <TouchableOpacity onPress={postVideo} style={styles.confirmButton}>
             <MaterialIcons name={'send'} size={50} color={'#727563'} />
           </TouchableOpacity>
-          <Text style={styles.confirmText}>Continue ?</Text>
+          <Text style={styles.confirmText}>Are you sure to continue ?</Text>
         </View>
       </View>
     </View>

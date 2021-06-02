@@ -3,15 +3,16 @@ import { View, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
 import {RNCamera} from 'react-native-camera';
 
 import styles from './styles';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation, useRoute } from "@react-navigation/native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const Camera = () => {
+const Camera = props => {
   const [isRecording, setIsRecording] = useState(false);
   const [cameraType, setCameraType] = useState(RNCamera.Constants.Type.back);
   const camera = useRef();
 
   const navigation = useNavigation();
+  const route = useRoute();
 
   const toggleCamera = () => {
     if (cameraType === RNCamera.Constants.Type.back) {
@@ -25,8 +26,14 @@ const Camera = () => {
     if (isRecording) {
       camera.current.stopRecording();
     } else {
-      const data = await camera.current.recordAsync({maxDuration: 60});
-      navigation.navigate('PreviewPost', {videoUri: data.uri});
+      const data = await camera.current.recordAsync({
+        maxDuration: 60,
+        quality: RNCamera.Constants.VideoQuality['480p'],
+      });
+      navigation.push('PreviewPost', {
+        videoUri: data.uri,
+        userId: props.userId,
+      });
     }
   };
 

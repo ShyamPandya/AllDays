@@ -4,27 +4,40 @@ import Video from 'react-native-video';
 import styles from './styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Storage} from 'aws-amplify';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
 
 const Post = props => {
   const [paused, setPaused] = useState(false);
   const [videoUri, setVideoUri] = useState('');
+  const [profilePage, setProfilePage] = useState('ProfilePage');
   const navigation = useNavigation();
+  const route = useRoute();
+  const isFocused = useIsFocused();
 
   const onPlayPausePress = () => {
     setPaused(!paused);
   };
 
   const openUserProfile = () => {
-    navigation.navigate('ProfilePage', {
-      screen: 'ProfilePage',
-      params: {
-        userInfo: props.post.user,
-      },
+    setPaused(true);
+    navigation.push(profilePage, {
+      screen: profilePage,
+      userInfo: props.post.user,
     });
   };
 
   useEffect(() => {
+    if (isFocused) {
+      setPaused(false);
+    } else {
+      setPaused(true);
+    }
+  }, [isFocused]);
+
+  useEffect(() => {
+    if (route.name === 'UserVideoPage') {
+      setProfilePage('UserProfilePage');
+    }
     const setupVideoUri = async () => {
       if (props.post.videoUri.startsWith('http')) {
         setVideoUri(props.post.videoUri);

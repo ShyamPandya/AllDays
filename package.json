@@ -10,6 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.15.4",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-community/netinfo": "^6.0.0",
     "@react-native-picker/picker": "^1.15.0",
@@ -18,7 +19,7 @@
     "@react-navigation/native": "^5.9.3",
     "@react-navigation/stack": "^5.14.3",
     "amazon-cognito-identity-js": "^4.6.0",
-    "aws-amplify": "^3.3.26",
+    "aws-amplify": "4.0.2-unstable.21",
     "aws-amplify-react-native": "^4.3.2",
     "react": "17.0.1",
     "react-native": "0.64.0",

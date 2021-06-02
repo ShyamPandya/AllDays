@@ -1,34 +1,32 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
   TextInput,
   StyleSheet,
   Button,
-  TouchableWithoutFeedback,
 } from 'react-native';
 import 'react-native-get-random-values';
 import {v4 as uuidv4} from 'uuid';
-import {Storage, API, graphqlOperation, Auth} from 'aws-amplify';
-import {useRoute, useNavigation} from '@react-navigation/native';
+import {Storage, API, graphqlOperation} from 'aws-amplify';
+import {useRoute, useNavigation, StackActions} from '@react-navigation/native';
 import styles from './styles';
 import {createPost} from '../../graphql/mutations';
 import RNPickerSelect from 'react-native-picker-select';
 import {brandData, categoryData} from '../../assets/constants/index';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const CreatePost = () => {
   const [description, setDescription] = useState('');
   const [selectedBrand, setSelectedBrand] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [videoKey, setVideoKey] = useState('');
 
   const route = useRoute();
   const navigation = useNavigation();
 
-  const uploadToStorage = async imagePath => {
-    console.log('Trying to upload to S3');
+  const uploadToStorage = async () => {
     try {
-      const response = await fetch(imagePath);
+      const response = await fetch(route.params.videoUri);
       console.log(response);
 
       const blob = await response.blob();
@@ -36,41 +34,34 @@ const CreatePost = () => {
 
       const filename = `${uuidv4()}.mp4`;
       console.log(filename);
+
       const s3Response = await Storage.put(filename, blob);
       console.log('Stored');
-      return s3Response.key;
-    } catch (e) {
-      console.error(e);
+      setVideoKey(s3Response.key);
+    } catch (error) {
+      console.error(error);
     }
-    return null;
   };
 
+  useEffect(() => {
+    uploadToStorage();
+  }, []);
+
   const onPublish = async () => {
-    const videoKey = await uploadToStorage(route.params.videoUri);
-    console.log('In publish');
-    // create post in the database (API)
-    if (videoKey) {
-      try {
-        const userInfo = await Auth.currentAuthenticatedUser();
+    try {
+      const newPost = {
+        videoUri: videoKey,
+        description: description,
+        userID: route.params.userId,
+        brandTag: selectedBrand,
+        categoryTag: selectedCategory,
+      };
+      console.log(newPost);
 
-        const newPost = {
-          videoUri: videoKey,
-          description: description,
-          userID: userInfo.attributes.sub,
-          brandTag: selectedBrand,
-          categoryTag: selectedCategory,
-        };
-
-        console.log(newPost);
-
-        await API.graphql(graphqlOperation(createPost, {input: newPost}));
-        navigation.navigate('HomePage', {screen: 'HomePage'});
-      } catch (e) {
-        console.error(e);
-      }
-    } else {
-      console.warn('Video is not yet uploaded');
-      return;
+      await API.graphql(graphqlOperation(createPost, {input: newPost}));
+      navigation.dispatch(StackActions.popToTop());
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -82,25 +73,8 @@ const CreatePost = () => {
     setSelectedBrand(val);
   };
 
-  const goBackSafe = () => {
-    // Traverse parent stack until we can go back
-    let parent = navigation;
-    while (
-      parent.dangerouslyGetState()?.index === 0 &&
-      parent.dangerouslyGetParent()
-    ) {
-      parent = parent.dangerouslyGetParent();
-    }
-    parent?.goBack();
-  };
-
   return (
     <View style={styles.container}>
-      <View style={{paddingTop: 20, paddingLeft: 20}}>
-        <TouchableWithoutFeedback onPress={goBackSafe}>
-          <Ionicons name={'arrow-back'} size={30} color="grey" />
-        </TouchableWithoutFeedback>
-      </View>
       <TextInput
         value={description}
         onChangeText={setDescription}
@@ -135,12 +109,17 @@ const CreatePost = () => {
         style={pickerSelectStyles}
         value={selectedBrand}
       />
-      <Button
-        style={{paddingTop: 20, paddingLeft: 20}}
-        title={'Publish'}
-        color="#727563"
-        onPress={() => onPublish()}
-      />
+      <View style={{paddingTop: 30}}>
+        {videoKey === '' ? (
+          <Text style={styles.textStyle}> Storing the video, please wait.</Text>
+        ) : (
+          <Button
+            title={'Publish'}
+            color="#727563"
+            onPress={() => onPublish()}
+          />
+        )}
+      </View>
     </View>
   );
 };

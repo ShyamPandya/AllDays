@@ -64,37 +64,49 @@ const HomePageStack = rootProps => {
         }}>
         {props => <HomePage {...props} userInfo={rootProps.userInfo} />}
       </Stack.Screen>
-    </Stack.Navigator>
-  );
-};
-
-const ProfilePageStack = rootProps => {
-  return (
-    <Stack.Navigator initialRouteName="ProfilePage">
+      <Stack.Screen
+        name="VideoPage"
+        options={{headerShown: false}}
+        component={Video}
+      />
       <Stack.Screen
         name="ProfilePage"
         options={{
-          headerLeft: () => (
-            <NavigationDrawerStructure navigationProps={rootProps.navigation} />
-          ),
           headerShown: false,
         }}>
-        {props => <ProfilePage {...props} userInfo={rootProps.userInfo} />}
+        {props => <ProfilePage {...props} />}
       </Stack.Screen>
     </Stack.Navigator>
   );
 };
 
-const UploadPageStack = ({navigation}) => {
+const ProfilePageStack = () => {
+  return (
+    <Stack.Navigator initialRouteName="UserProfilePage">
+      <Stack.Screen
+        name="UserProfilePage"
+        options={{headerShown: false}}
+        component={ProfilePage}
+      />
+      <Stack.Screen
+        name="UserVideoPage"
+        options={{headerShown: false}}
+        component={Video}
+      />
+    </Stack.Navigator>
+  );
+};
+
+const UploadPageStack = rootProps => {
   return (
     <Stack.Navigator initialRouteName="UploadPage">
       <Stack.Screen
         name="UploadPage"
-        component={Camera}
         options={{
           headerShown: false,
-        }}
-      />
+        }}>
+        {props => <Camera {...props} userId={rootProps.userId} />}
+      </Stack.Screen>
       <Stack.Screen
         options={{
           headerShown: false,
@@ -134,48 +146,48 @@ const SignOutStack = ({navigation}) => {
   );
 };
 
-const DrawerComponent = rootProps => {
-  return (
-    <Drawer.Navigator
-      drawerContent={props => (
-        <DrawerContent {...props} userInfo={rootProps.userInfo} />
-      )}>
-      <Drawer.Screen name="HomePage">
-        {props => <HomePageStack {...props} userInfo={rootProps.userInfo} />}
-      </Drawer.Screen>
-      <Drawer.Screen name="ProfilePage">
-        {props => <ProfilePageStack {...props} userInfo={rootProps.userInfo} />}
-      </Drawer.Screen>
-      <Drawer.Screen
-        name="UploadPage"
-        options={{drawerLabel: 'Upload'}}
-        component={UploadPageStack}
-      />
-      <Drawer.Screen
-        name="SignOutPage"
-        options={{drawerLabel: 'SignOut'}}
-        component={SignOutStack}
-      />
-    </Drawer.Navigator>
-  );
-};
-
 const RootNavigation = rootProps => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Drawer">
+      <Drawer.Navigator
+        drawerContent={props => (
+          <DrawerContent {...props} userInfo={rootProps.userInfo} />
+        )}>
+        <Drawer.Screen name="HomePage">
+          {props => <HomePageStack {...props} userInfo={rootProps.userInfo} />}
+        </Drawer.Screen>
+        <Drawer.Screen name="UserProfilePage">
+          {props => (
+            <ProfilePageStack {...props} userInfo={rootProps.userInfo} />
+          )}
+        </Drawer.Screen>
+        <Drawer.Screen name="UploadPage">
+          {props => (
+            <UploadPageStack {...props} userId={rootProps.userInfo.id} />
+          )}
+        </Drawer.Screen>
+        <Drawer.Screen
+          name="SignOutPage"
+          options={{drawerLabel: 'SignOut'}}
+          component={SignOutStack}
+        />
+      </Drawer.Navigator>
+    </NavigationContainer>
+  );
+};
+export default RootNavigation;
+
+/*
+<Stack.Navigator initialRouteName="Drawer">
         <Stack.Screen name="Drawer" options={{headerShown: false}}>
           {props => (
             <DrawerComponent {...props} userInfo={rootProps.userInfo} />
           )}
         </Stack.Screen>
         <Stack.Screen
-          name="VideoPage"
+          name=""VideoPage""
           options={{headerShown: false}}
           component={Video}
         />
       </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
-export default RootNavigation;
+ */

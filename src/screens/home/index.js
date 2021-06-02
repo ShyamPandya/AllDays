@@ -23,7 +23,10 @@ const HomePage = props => {
         let ops = {};
 
         postsList.forEach(post => {
-          if (props.userInfo.brandInterest.includes(post.brandTag)) {
+          if (
+            props.userInfo.brandInterest &&
+            props.userInfo.brandInterest.includes(post.brandTag)
+          ) {
             if (post.brandTag in bps) {
               bps[post.brandTag].push(post);
             } else {
@@ -39,7 +42,10 @@ const HomePage = props => {
               ops[key] = [post];
             }
           }
-          if (props.userInfo.categoryInterest.includes(post.categoryTag)) {
+          if (
+            props.userInfo.categoryInterest &&
+            props.userInfo.categoryInterest.includes(post.categoryTag)
+          ) {
             if (post.categoryTag in cps) {
               cps[post.categoryTag].push(post);
             } else {
@@ -69,6 +75,7 @@ const HomePage = props => {
   };
 
   useEffect(() => {
+    console.log(props);
     setStateData();
   }, []);
 
@@ -87,67 +94,77 @@ const HomePage = props => {
             Coming Soon
           </Text>
         </View>
-        <Text
-          style={{
-            fontSize: 24,
-            fontWeight: '700',
-            paddingHorizontal: 20,
-            fontFamily: '',
-          }}>
-          Brands
-        </Text>
-        <FlatList
-          data={brandPosts}
-          renderItem={({item}) => (
-            <Thumbnail
-              posts={item}
-              height={130}
-              width={130}
-              showType={true}
-              type={'brand'}
-              leftMargin={30}
-              topMargin={20}
+        {brandPosts.length > 0 ? (
+          <View>
+            <Text
+              style={{
+                fontSize: 24,
+                fontWeight: '700',
+                paddingHorizontal: 20,
+                fontFamily: '',
+              }}>
+              Brands
+            </Text>
+            <FlatList
+              data={brandPosts}
+              renderItem={({item}) => (
+                <Thumbnail
+                  posts={item}
+                  height={130}
+                  width={130}
+                  showType={true}
+                  type={'brand'}
+                  leftMargin={30}
+                  topMargin={20}
+                />
+              )}
+              showsHorizontalScrollIndicator={false}
+              horizontal={true}
+              keyExtractor={(item, index) => index.toString()}
             />
-          )}
-          showsHorizontalScrollIndicator={false}
-          horizontal={true}
-          keyExtractor={(item, index) => index.toString()}
-        />
-        <Text
-          style={{
-            fontSize: 24,
-            fontWeight: '700',
-            paddingHorizontal: 20,
-            fontFamily: '',
-          }}>
-          Categories
-        </Text>
-        <FlatList
-          data={categoryPosts}
-          renderItem={({item}) => (
-            <Thumbnail
-              posts={item}
-              height={130}
-              width={130}
-              showType={true}
-              type={'category'}
-              leftMargin={30}
-              topMargin={20}
+          </View>
+        ) : null}
+        {categoryPosts.length > 0 ? (
+          <View>
+            <Text
+              style={{
+                fontSize: 24,
+                fontWeight: '700',
+                paddingHorizontal: 20,
+                fontFamily: '',
+              }}>
+              Categories
+            </Text>
+            <FlatList
+              data={categoryPosts}
+              renderItem={({item}) => (
+                <Thumbnail
+                  posts={item}
+                  height={130}
+                  width={130}
+                  showType={true}
+                  type={'category'}
+                  leftMargin={30}
+                  topMargin={20}
+                />
+              )}
+              showsHorizontalScrollIndicator={false}
+              horizontal={true}
+              keyExtractor={(item, index) => index.toString()}
             />
-          )}
-          showsHorizontalScrollIndicator={false}
-          horizontal={true}
-          keyExtractor={(item, index) => index.toString()}
-        />
-        <Text
-          style={{
-            fontSize: 24,
-            fontWeight: '700',
-            paddingHorizontal: 20,
-            fontFamily: '',
-          }}>
-          More Videos
-        </Text>
+          </View>
+        ) : null}
+        {otherPosts.length > 0 ? (
+          <Text
+            style={{
+              fontSize: 24,
+              fontWeight: '700',
+              paddingHorizontal: 20,
+              fontFamily: '',
+            }}>
+            More Videos
+          </Text>
+        ) : null}
       </View>
     );
   };

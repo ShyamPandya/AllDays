@@ -1,5 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, FlatList, Image, Dimensions, TouchableWithoutFeedback } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  Dimensions,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import Thumbnail from '../Thumbnail';
 import styles from './styles';
 import {API, graphqlOperation} from 'aws-amplify';
@@ -8,7 +15,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import {useIsFocused} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const ProfilePage = props => {
+const ProfilePage = () => {
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState(null);
   const route = useRoute();
@@ -61,7 +68,8 @@ const ProfilePage = props => {
   const ProfileComponent = () => {
     return (
       <View>
-        <View style={{paddingTop: 20, paddingLeft: 20, backgroundColor: 'white'}}>
+        <View
+          style={{paddingTop: 20, paddingLeft: 20, backgroundColor: 'white'}}>
           <TouchableWithoutFeedback onPress={goBackSafe}>
             <Ionicons name={'arrow-back'} size={30} color="grey" />
           </TouchableWithoutFeedback>

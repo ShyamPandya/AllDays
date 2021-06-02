@@ -2,16 +2,18 @@ import React, {useState, useEffect} from 'react';
 import {ImageBackground, Text, TouchableOpacity, View} from 'react-native';
 import {Storage} from 'aws-amplify';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {brandData, categoryData} from '../../assets/constants';
 
 const Thumbnail = props => {
   const [imgUri, setImgUri] = useState('');
+  const [videoPage, setVideoPage] = useState('VideoPage');
   const navigation = useNavigation();
+  const route = useRoute();
 
   const playVideos = () => {
-    navigation.navigate('VideoPage', {
-      screen: 'VideoPage',
+    navigation.push(videoPage, {
+      screen: videoPage,
       posts: props.posts,
     });
   };
@@ -24,16 +26,20 @@ const Thumbnail = props => {
         ),
       );
     };
+    if (route.name === 'UserProfilePage') {
+      setVideoPage('UserVideoPage');
+    }
     if (props.posts && props.posts.length > 0) {
       setImgUriData();
     }
-  });
+  }, [route.name, props.posts]);
 
   return imgUri === '' ? null : (
     <View
       style={{
         marginLeft: props.leftMargin,
         marginTop: props.topMargin,
+        marginRight: 5,
       }}>
       <View style={{flex: 2, borderWidth: 0.5, borderColor: 'black'}}>
         <ImageBackground
